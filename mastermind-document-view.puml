@@ -1,0 +1,117 @@
+@startuml
+
+title Mastermind - DocumentView
+
+package mastermind.models{
+
+    Mastermind *--> Game
+    Mastermind ..> mastermind.views.MastermindView
+    
+    Attempt *--> Combination
+    Attempt ..> SecretCombination
+    Attempt ..> mastermind.views.ProposedCombinationView
+    
+    Game o-->"0..10" Attempt 
+    Game *--> SecretCombination
+    Game *--> mastermind.views.GameView
+    
+    Combination *-->"4" Color
+    Combination <|--  SecretCombination
+    
+    class Mastermind {
+        + play() : void
+        + {static} main() : void
+        - isResumed()
+    }
+    
+    class Game{
+        - {static} ATTEMPTS : int
+        + play() : void
+        - isFinished() : boolean
+    }
+    
+    class Attempt{
+        - piecesBlack : int
+        - piecesWhite : int
+        +toString() : String
+        +isWinner() : boolean
+        + play(SecretCombination secretCombination) : void
+    }
+    
+    class SecretCombination{
+        - generateRandom() : void
+        + getBlacks(Combination proposedCombination) : int
+        + getWhites(Combination proposedCombination) : int
+        + toString() : String
+    }
+    
+    class Combination{
+        - colorList : ArrayList<Color>
+        Combination(String)
+        # toString() : String
+        # size() : int
+    }
+    
+    enum Color{
+        RED
+        BLUE
+        YELLOW
+        ORANGE
+        PINK
+        GREEN
+        + toChar() : char
+        + {static} valueOf(char character) : Color
+        + {static} isValidColor(char character) : boolean
+    }
+}
+
+package mastermind.views{
+
+    MastermindView ..-> YesNoDialog
+    MastermindView ..> Console
+    
+    ProposedCombinationView ..> Console
+    
+    GameView ..> mastermind.models.Combination
+    GameView ..> mastermind.models.Attempt
+    GameView ..> Console
+    
+    YesNoDialog ..> Console
+    
+    enum Message{
+        +GAME_TITLE
+        +WRONG_COMBINATION_LENGTH
+        +WRONG_COMBINATION_COLORS
+        +WRONG_COMBINATION_UNIQUE
+        +PROPOSE_COMBINATION
+    }
+    
+    class MastermindView {
+        -showTitle()
+        +askContinue() : boolean
+    }
+    
+    class GameView{
+        +showSecretCombination(Combination secretCombination)
+        +showAttemps(Attempts[])
+        +showWinner()
+        +showLoser()
+    }
+    
+    
+    
+    class YesNoDialog{
+        +read(String): boolean
+    }
+    
+    class ProposedCombinationView{
+         userInput : String
+        + read() : String
+        - isValid() : boolean
+        - isValidLength() : boolean
+        - isValidColors() : boolean
+        - isUniqueChars() : boolean
+    }
+}
+
+@enduml
