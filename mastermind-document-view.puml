@@ -2,7 +2,7 @@
 
 title Mastermind - DocumentView
 
-package mastermind.models{
+namespace mastermind.models{
 
     Mastermind *--> Game
     Mastermind ..> mastermind.views.MastermindView
@@ -65,7 +65,7 @@ package mastermind.models{
     }
 }
 
-package mastermind.views{
+namespace mastermind.views{
 
     MastermindView ..-> YesNoDialog
     MastermindView ..> Console
@@ -96,9 +96,7 @@ package mastermind.views{
         +showAttemps(Attempts[])
         +showWinner()
         +showLoser()
-    }
-    
-    
+    }       
     
     class YesNoDialog{
         +read(String): boolean
